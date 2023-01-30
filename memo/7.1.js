@@ -180,12 +180,29 @@ class CustomerData {
 }
 
 
-
-
 // 읽기
 function compareUsage(customerId, laterYear, month) {
   const later = getCustomerData().usage(customerId, laterYear, month);
   const earlier = getCustomerData().usage(customerId, laterYear - 1, month)
+
+  return {laterAmount : later, change : later - earlier};
+}
+
+
+class CustomerData {
+  constructor(data) {
+    this._data = data;
+  }
+
+  get rawData() {
+    return _.cloneDeep(this._data);
+  }
+}
+
+// 읽기
+function compareUsage(customerId, laterYear, month) {
+  const later = getCustomerData().rawData[customerId].usages[laterYear][month];
+  const earlier = getCustomerData().rawData[customerId].usages[laterYear - 1][month];
 
   return {laterAmount : later, change : later - earlier};
 }
